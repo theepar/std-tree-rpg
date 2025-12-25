@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1765303227 source:c:\users\deva\desktop\kodingan\code_block\rpg\main.cpp
+	<iostream>
+	<vector>
+	"rpg.h"
+
+1765303206 c:\users\deva\desktop\kodingan\code_block\rpg\rpg.h
+	<iostream>
+	<string>
+
+1765303214 source:c:\users\deva\desktop\kodingan\code_block\rpg\rpg.cpp
+	"rpg.h"
+
