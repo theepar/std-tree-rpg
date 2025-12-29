@@ -181,6 +181,7 @@ int main() {
                 menuHapusNode(root);
                 break;
             case 5:
+                deleteTree(root);
                 root = nullptr;
                 buildBaseStructure(root);
                 cout << "\nTree berhasil di-reset!" << endl;
