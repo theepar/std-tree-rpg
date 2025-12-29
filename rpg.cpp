@@ -39,7 +39,6 @@ void printTree(adrNode root, int level) {
     for (int i = 0; i < level; i++) {
         cout << "    ";
     }
-
     if (level > 0) cout << "|-- ";
 
     cout << root->info << endl;
@@ -52,7 +51,7 @@ void printTree(adrNode root, int level) {
 // Pre-order Traversal: Root -> Child -> Sibling
 void preOrder(adrNode root) {
     if (root == nullptr) return;
-    
+
     cout << root->info << " -> ";
     preOrder(root->child);
     preOrder(root->next);
@@ -61,46 +60,34 @@ void preOrder(adrNode root) {
 // In-order Traversal: Left Child -> Root -> Right Siblings
 void inOrder(adrNode root) {
     if (root == nullptr) return;
-    
-    if (root->child != nullptr) {
-        inOrder(root->child);
-    }
-    
+
+    inOrder(root->child);
     cout << root->info << " -> ";
-    
-    if (root->child != nullptr && root->child->next != nullptr) {
-        inOrder(root->child->next);
-    }
-    
     inOrder(root->next);
 }
 
 // Post-order Traversal: Child -> Sibling -> Root
 void postOrder(adrNode root) {
     if (root == nullptr) return;
-    
+
     postOrder(root->child);
     postOrder(root->next);
     cout << root->info << " -> ";
 }
 
-// Menghapus node berdasarkan nama 
 bool deleteNode(adrNode &root, string value) {
     if (root == nullptr) return false;
-    
+
     adrNode prev = nullptr;
     adrNode curr = root->child;
-    
+
     while (curr != nullptr) {
         if (curr->info == value) {
-            // Hapus curr dari list
             if (prev == nullptr) {
-                // curr adalah anak pertama
                 root->child = curr->next;
             } else {
                 prev->next = curr->next;
             }
-            // Hapus semua anak dari curr secara rekursif
             while (curr->child != nullptr) {
                 deleteNode(curr, curr->child->info);
             }
@@ -111,28 +98,24 @@ bool deleteNode(adrNode &root, string value) {
         prev = curr;
         curr = curr->next;
     }
-    
-    // Cari rekursif ke anak-anak
+
     curr = root->child;
     while (curr != nullptr) {
         if (deleteNode(curr, value)) return true;
         curr = curr->next;
     }
-    
+
     return false;
 }
 
-void buildBaseStructure(adrNode &root) {
-    // Level 0 - Root
+void buildBaseStructure(adrNode &root){
     root = newNode("Game RPG");
 
-    // Level 1
     adrNode map = newNode("Map");
     adrNode quest = newNode("Quest");
     insertChild(root, map);
     insertChild(root, quest);
 
-    // Level 2 - Anak dari Map
     adrNode kotaAwal = newNode("Kota Awal");
     adrNode hutanGelap = newNode("Hutan Gelap");
     adrNode dungeonKuno = newNode("Dungeon Kuno");
@@ -140,32 +123,80 @@ void buildBaseStructure(adrNode &root) {
     insertChild(map, hutanGelap);
     insertChild(map, dungeonKuno);
 
-    // Level 2 - Anak dari Quest
     adrNode mainQuest = newNode("Main Quest");
     adrNode sideQuest = newNode("Side Quest");
     insertChild(quest, mainQuest);
     insertChild(quest, sideQuest);
 
-    // Level 3 - Anak dari Kota Awal
     insertChild(kotaAwal, newNode("NPC Pedagang"));
     insertChild(kotaAwal, newNode("NPC Pandai Besi"));
-    insertChild(kotaAwal, newNode("Inn"));
 
-    // Level 3 - Anak dari Hutan Gelap
     insertChild(hutanGelap, newNode("Goblin"));
     insertChild(hutanGelap, newNode("Serigala"));
     insertChild(hutanGelap, newNode("Naga Hutan"));
 
-    // Level 3 - Anak dari Dungeon Kuno
     insertChild(dungeonKuno, newNode("Skeleton"));
     insertChild(dungeonKuno, newNode("Boss Lich"));
     insertChild(dungeonKuno, newNode("Treasure Chest"));
 
-    // Level 3 - Anak dari Main Quest
     insertChild(mainQuest, newNode("Kalahkan Naga"));
     insertChild(mainQuest, newNode("Selamatkan Putri"));
 
-    // Level 3 - Anak dari Side Quest
     insertChild(sideQuest, newNode("Kumpulkan 10 Herb"));
     insertChild(sideQuest, newNode("Bunuh 5 Goblin"));
+}
+
+// Mencetak path dari root menuju node target
+bool printPath(adrNode root, string target) {
+    if (root == nullptr) return false;
+
+    if (root->info == target) {
+        cout << root->info;
+        return true;
+    }
+
+    adrNode child = root->child;
+    while (child != nullptr) {
+        if (printPath(child, target)) {
+            return true;
+        }
+        child = child->next;
+    }
+
+    return false;
+}
+
+// Helper untuk printPath
+bool findPath(adrNode root, string target, string &path) {
+    if (root == nullptr) return false;
+
+    if (root->info == target) {
+        path = root->info;
+        return true;
+    }
+
+    adrNode child = root->child;
+    while (child != nullptr) {
+        if (findPath(child, target, path)) {
+            path = root->info + " -> " + path;
+            return true;
+        }
+        child = child->next;
+    }
+
+    return false;
+}
+
+// Fitur Update Node
+bool updateNode(adrNode root, string oldValue, string newValue) {
+    if (root == nullptr) return false;
+
+    adrNode target = findNode(root, oldValue);
+
+    if (target != nullptr) {
+        target->info = newValue;
+        return true;
+    }
+
+    return false;
 }

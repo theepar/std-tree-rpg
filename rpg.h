@@ -24,7 +24,9 @@ void inOrder(adrNode root);
 void postOrder(adrNode root);
 
 bool deleteNode(adrNode &root, string value);
-
 void buildBaseStructure(adrNode &root);
+bool printPath(adrNode root, string target);
+bool findPath(adrNode root, string target, string &path);
+bool updateNode(adrNode root, string oldValue, string newValue);
 
 #endif

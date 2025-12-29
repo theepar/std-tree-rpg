@@ -11,3 +11,14 @@
 1766673762 source:c:\users\deva\desktop\kodingan\code_block\rpg\rpg.cpp
 	"rpg.h"
 
+1767004161 source:d:\kodingan\code_block\rpg\rpg.cpp
+	"rpg.h"
+
+1767004255 d:\kodingan\code_block\rpg\rpg.h
+	<iostream>
+	<string>
+
+1766998137 source:d:\kodingan\code_block\rpg\main.cpp
+	<iostream>
+	"rpg.h"
+

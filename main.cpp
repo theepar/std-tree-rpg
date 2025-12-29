@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// Fungsi menampilkan menu utama
 void tampilkanMenu() {
     cout << "\n========================================" << endl;
     cout << "         MENU GAME RPG TREE            " << endl;
@@ -14,12 +13,13 @@ void tampilkanMenu() {
     cout << "4. Hapus Node" << endl;
     cout << "5. Reset Tree (Rebuild)" << endl;
     cout << "6. Insert Data" << endl;
+    cout << "7. Navigasi (GPS / Jejak Leluhur)" << endl;
+    cout << "8. Update Nama Node" << endl;
     cout << "0. Keluar" << endl;
     cout << "========================================" << endl;
-    cout << "Pilih menu [0-6]: ";
+    cout << "Pilih menu [0-8]: ";
 }
 
-//Fungsi menampilkan menu traversal
 void tampilkanMenuTraversal(){
     cout << "\n========================================" << endl;
     cout << "           PILIH TRAVERSAL         " << endl;
@@ -31,7 +31,6 @@ void tampilkanMenuTraversal(){
     cout << "Nomer: ";
 }
 
-// Fungsi untuk menampilkan visualisasi tree
 void menuVisualisasi(adrNode root) {
     cout << "\n========================================" << endl;
     cout << "       VISUALISASI TREE GAME RPG       " << endl;
@@ -41,7 +40,6 @@ void menuVisualisasi(adrNode root) {
     cin.get();
 }
 
-// Fungsi untuk menampilkan pre order traversal
 void menuPreOrderTraversal(adrNode root) {
     cout << "\n[Pre-Order Traversal]" << endl;
     cout << "Root -> Child -> Sibling" << endl;
@@ -52,7 +50,6 @@ void menuPreOrderTraversal(adrNode root) {
     cin.get();
 }
 
-// Fungsi untuk menampilkan in order traversal
 void menuInOrderTraversal(adrNode root) {
     cout << "\n[In-Order Traversal]" << endl;
     cout << "Left Child -> Root -> Right Siblings" << endl;
@@ -63,7 +60,6 @@ void menuInOrderTraversal(adrNode root) {
     cin.get();
 }
 
-// Fungsi untuk menampilkan post order traversal
 void menuPostOrderTraversal(adrNode root) {
     cout << "\n[Post-Order Traversal]" << endl;
     cout << "Child -> Sibling -> Root" << endl;
@@ -74,7 +70,6 @@ void menuPostOrderTraversal(adrNode root) {
     cin.get();
 }
 
-// Fungsi untuk pencarian node
 void menuCariNode(adrNode root) {
     cout << "\n========================================" << endl;
     cout << "           PENCARIAN NODE              " << endl;
@@ -100,13 +95,11 @@ void menuCariNode(adrNode root) {
     }
 }
 
-// Fungsi untuk hapus node
 void menuHapusNode(adrNode& root) {
     cout << "\n========================================" << endl;
     cout << "           HAPUS NODE                  " << endl;
     cout << "========================================" << endl;
 
-    // Tampilkan tree terlebih dahulu
     cout << "[Struktur Tree Saat Ini]" << endl;
     printTree(root, 0);
     cout << endl;
@@ -139,7 +132,6 @@ int main() {
     int pilihan;
     string input, parent, child;
 
-    // Build struktur awal
     buildBaseStructure(root);
 
     do {
@@ -149,7 +141,6 @@ int main() {
         tampilkanMenu();
         getline(cin, input);
 
-        // Validasi input
         if (input.empty() || input.length() > 1 || !isdigit(input[0])) {
             cout << "Input tidak valid! Tekan Enter...";
             cin.get();
@@ -190,7 +181,6 @@ int main() {
                 menuHapusNode(root);
                 break;
             case 5:
-                // Reset tree
                 root = nullptr;
                 buildBaseStructure(root);
                 cout << "\nTree berhasil di-reset!" << endl;
@@ -219,6 +209,76 @@ int main() {
                 cout << "Tekan Enter untuk kembali ke menu...";
                 cin.get();
                 break;
+            case 7: {
+                cout << "\n========================================" << endl;
+                cout << "     NAVIGASI (JEJAK NODE)    " << endl;
+                cout << "========================================" << endl;
+                cout << "[Struktur Tree Saat Ini]" << endl;
+                printTree(root, 0);
+                cout << endl;
+
+                string navChoice = "y";
+                while (navChoice == "y" || navChoice == "Y") {
+                    string targetNode;
+                    cout << "Masukkan nama node tujuan: ";
+                    getline(cin, targetNode);
+
+                    if (!targetNode.empty()) {
+                        string path = "";
+                        
+                        if (findPath(root, targetNode, path)) {
+                            cout << "\n[PATH DITEMUKAN]" << endl;
+                            cout << "Jejak Node: " << path << endl;
+                        } else {
+                            cout << "\nNode '" << targetNode << "' TIDAK DITEMUKAN dalam tree!" << endl;
+                        }
+                    }
+
+                    cout << "\nCari path lain? (y/n): ";
+                    getline(cin, navChoice);
+                }
+                break;
+            }
+            case 8: {
+                // Menu Update Nama Node
+                cout << "\n========================================" << endl;
+                cout << "          UPDATE NAMA NODE             " << endl;
+                cout << "========================================" << endl;
+                cout << "[Struktur Tree Saat Ini]" << endl;
+                printTree(root, 0);
+                cout << endl;
+
+                string updateChoice = "y";
+                while (updateChoice == "y" || updateChoice == "Y") {
+                    string oldName, newName;
+                    cout << "Masukkan nama node yang ingin diubah: ";
+                    getline(cin, oldName);
+
+                    if (!oldName.empty()) {
+                        adrNode checkNode = findNode(root, oldName);
+                        if (checkNode != nullptr) {
+                            cout << "Masukkan nama baru: ";
+                            getline(cin, newName);
+
+                            if (!newName.empty()) {
+                                if (updateNode(root, oldName, newName)) {
+                                    cout << "\nBerhasil mengubah '" << oldName << "' menjadi '" << newName << "'!" << endl;
+                                    cout << "\n[Tree setelah update]" << endl;
+                                    printTree(root, 0);
+                                }
+                            } else {
+                                cout << "Nama baru tidak boleh kosong!" << endl;
+                            }
+                        } else {
+                            cout << "Node '" << oldName << "' tidak ditemukan!" << endl;
+                        }
+                    }
+
+                    cout << "\nUpdate node lain? (y/n): ";
+                    getline(cin, updateChoice);
+                }
+                break;
+            }
             case 0:
                 cout << "\n========================================" << endl;
                 cout << "   TERIMA KASIH TELAH MENGGUNAKAN      " << endl;
