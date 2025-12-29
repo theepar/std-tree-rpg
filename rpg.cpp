@@ -200,3 +200,12 @@ bool updateNode(adrNode root, string oldValue, string newValue) {
 
     return false;
 }
+// Fungsi untuk menghapus semua node secara rekursif
+void deleteTree(adrNode root) {
+    if (root == nullptr) return;
+
+    deleteTree(root->child);
+    deleteTree(root->next);
+
+    delete root;
+}
